@@ -1,9 +1,11 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import shutil
 import subprocess
 from urlparse import urlparse
 
-from files import copy_files
+from .files import copy_files
 from toil_rnaseq.utils import require
 
 
@@ -86,7 +88,7 @@ def _s3am_with_retry(num_cores, file_path, s3_url, mode='upload', s3_key_path=No
         if ret_code == 0:
             return
         else:
-            print 'S3AM failed with status code: {}'.format(ret_code)
+            print('S3AM failed with status code: {}'.format(ret_code))
     raise RuntimeError('S3AM failed to {} after {} retries.'.format(mode, retry_count))
 
 

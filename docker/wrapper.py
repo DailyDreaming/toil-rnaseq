@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import json
 import logging
@@ -28,7 +29,7 @@ def call_pipeline(mount, args):
 
     # Activate the virtual environment where the toil rnaseq pipeline is installed
     activate_this = '/opt/rnaseq-pipeline/toil_venv/bin/activate_this.py'
-    execfile(activate_this, dict(__file__=activate_this))
+    exec(compile(open(activate_this, "rb").read(), activate_this, 'exec'), dict(__file__=activate_this))
 
     if args.auto_scale:
         # Run the meoso-master process

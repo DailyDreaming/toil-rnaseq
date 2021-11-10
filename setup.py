@@ -1,4 +1,6 @@
-from version import version, required_versions
+from __future__ import absolute_import
+from __future__ import print_function
+from .version import version, required_versions
 from setuptools import find_packages, setup
 
 

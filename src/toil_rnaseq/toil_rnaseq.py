@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 # Standard imports
+from __future__ import absolute_import
 import argparse
 import multiprocessing
 import os
@@ -13,31 +14,31 @@ from toil.common import Toil
 from toil.job import Job, PromisedRequirement
 
 # Local imports
-from tools.aligners import run_star
-from tools.bams import sort_and_save_bam
-from tools.jobs import cleanup_ids
-from tools.jobs import consolidate_output
-from tools.jobs import map_job
-from tools.jobs import save_wiggle
-from tools.preprocessing import download_and_process_bam
-from tools.preprocessing import download_and_process_fastqs
-from tools.preprocessing import download_and_process_tar
-from tools.qc import run_bamqc
-from tools.qc import run_fastqc
-from tools.quantifiers import run_hera
-from tools.quantifiers import run_kallisto
-from tools.quantifiers import run_rsem
-from tools.quantifiers import run_rsem_gene_mapping
-from utils import UserError, rexpando
-from utils import configuration_sanity_checks
-from utils import generate_config
-from utils import generate_manifest
-from utils import parse_samples
-from utils import require
-from utils import user_input_config
-from utils import user_input_manifest
-from utils.files import generate_file
-from utils.filesize import human2bytes
+from .tools.aligners import run_star
+from .tools.bams import sort_and_save_bam
+from .tools.jobs import cleanup_ids
+from .tools.jobs import consolidate_output
+from .tools.jobs import map_job
+from .tools.jobs import save_wiggle
+from .tools.preprocessing import download_and_process_bam
+from .tools.preprocessing import download_and_process_fastqs
+from .tools.preprocessing import download_and_process_tar
+from .tools.qc import run_bamqc
+from .tools.qc import run_fastqc
+from .tools.quantifiers import run_hera
+from .tools.quantifiers import run_kallisto
+from .tools.quantifiers import run_rsem
+from .tools.quantifiers import run_rsem_gene_mapping
+from .utils import UserError, rexpando
+from .utils import configuration_sanity_checks
+from .utils import generate_config
+from .utils import generate_manifest
+from .utils import parse_samples
+from .utils import require
+from .utils import user_input_config
+from .utils import user_input_manifest
+from .utils.files import generate_file
+from .utils.filesize import human2bytes
 
 
 def workflow(job, sample, config):
@@ -201,7 +202,7 @@ def main():
         # Parse config and store as Expando object for dot attribute accession
         require(os.path.exists(args.config), '{} not found. Run "toil-rnaseq generate"'.format(args.config))
         config = rexpando(yaml.load(open(args.config).read()))
-        config.maxCores = int(args.maxCores) if args.maxCores else sys.maxint  # Set maxCores from args
+        config.maxCores = int(args.maxCores) if args.maxCores else sys.maxsize  # Set maxCores from args
 
         # Sanity check configuration file
         config = configuration_sanity_checks(config)
