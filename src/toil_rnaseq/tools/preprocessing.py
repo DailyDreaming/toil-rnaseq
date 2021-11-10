@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import os
 import re
 import subprocess
 from subprocess import PIPE
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from toil.job import PromisedRequirement
 from toil.lib.docker import dockerCall

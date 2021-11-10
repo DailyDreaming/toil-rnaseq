@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+from __future__ import absolute_import
 import argparse
 import logging
 import os
@@ -11,6 +12,7 @@ from toil.lib.docker import dockerCall
 from utils.files import move_files
 from utils.files import tarball_files
 from utils.urls import download_url
+from six.moves import input
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -234,7 +236,7 @@ def main():
     # If no tools selected...
     if not any([args.star, args.rsem, args.kallisto, args.hera]):
         log.info('No tools were selected to create indices for')
-        r = raw_input('Type Y/y to create indices for all tools or exit.')
+        r = input('Type Y/y to create indices for all tools or exit.')
         if r.lower() == 'y':
             args.star, args.rsem, args.kallisto, args.hera = True, True, True, True
         else:

@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 # Standard imports
+from __future__ import absolute_import
 import argparse
 import multiprocessing
 import os
@@ -201,7 +202,7 @@ def main():
         # Parse config and store as Expando object for dot attribute accession
         require(os.path.exists(args.config), '{} not found. Run "toil-rnaseq generate"'.format(args.config))
         config = rexpando(yaml.load(open(args.config).read()))
-        config.maxCores = int(args.maxCores) if args.maxCores else sys.maxint  # Set maxCores from args
+        config.maxCores = int(args.maxCores) if args.maxCores else sys.maxsize  # Set maxCores from args
 
         # Sanity check configuration file
         config = configuration_sanity_checks(config)
