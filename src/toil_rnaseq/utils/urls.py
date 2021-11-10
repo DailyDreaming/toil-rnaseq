@@ -5,7 +5,7 @@ import shutil
 import subprocess
 from six.moves.urllib.parse import urlparse
 
-from .files import copy_files
+from files import copy_files
 from toil_rnaseq.utils import require
 from six.moves import range
 

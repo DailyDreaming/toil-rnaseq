@@ -9,9 +9,9 @@ from multiprocessing import cpu_count
 from toil.job import Job
 from toil.lib.docker import dockerCall
 
-from .utils.files import move_files
-from .utils.files import tarball_files
-from .utils.urls import download_url
+from utils.files import move_files
+from utils.files import tarball_files
+from utils.urls import download_url
 from six.moves import input
 
 logging.basicConfig(level=logging.INFO)

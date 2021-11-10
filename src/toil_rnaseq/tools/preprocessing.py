@@ -8,9 +8,9 @@ from six.moves.urllib.parse import urlparse
 from toil.job import PromisedRequirement
 from toil.lib.docker import dockerCall
 
-from .bams import convert_bam_to_fastq
-from .bams import download_bam_from_gdc
-from .jobs import cleanup_ids
+from bams import convert_bam_to_fastq
+from bams import download_bam_from_gdc
+from jobs import cleanup_ids
 from toil_rnaseq.tools import cutadapt_version
 from toil_rnaseq.utils import require, UserError
 from toil_rnaseq.utils.urls import download_url
