@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import os
 import tarfile
 from contextlib import closing
 
 from toil_rnaseq.utils import partitions
 from toil_rnaseq.utils.urls import move_or_upload
+import six
 
 
 def cleanup_ids(job, ids_to_delete):
@@ -63,13 +65,13 @@ def consolidate_output(job, config, output):
 
     # Collect all tarballs from fileStore
     tars = {}
-    for tool, filestore_id in output.iteritems():
+    for tool, filestore_id in six.iteritems(output):
         tars[os.path.join(config.uuid, tool)] = job.fileStore.readGlobalFile(filestore_id)
 
     # Consolidate tarballs into one output tar as streams (to avoid unnecessary decompression)
     out_tar = os.path.join(job.tempDir, config.uuid + '.tar.gz')
     with tarfile.open(out_tar, 'w:gz') as f_out:
-        for name, tar in tars.iteritems():
+        for name, tar in six.iteritems(tars):
             with tarfile.open(tar, 'r') as f_in:
                 for tarinfo in f_in:
                     with closing(f_in.extractfile(tarinfo)) as f_in_file:

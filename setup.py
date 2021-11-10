@@ -1,5 +1,8 @@
-from version import version, required_versions
+from __future__ import absolute_import
+from __future__ import print_function
+from .version import version, required_versions
 from setuptools import find_packages, setup
+import six
 
 
 kwargs = dict(
@@ -9,7 +12,7 @@ kwargs = dict(
     author='UCSC Computational Genomics Lab',
     author_email='cgl-toil@googlegroups.com',
     url="https://github.com/BD2KGenomics/toil-lib",
-    install_requires=[x + y for x, y in required_versions.iteritems()],
+    install_requires=[x + y for x, y in six.iteritems(required_versions)],
     tests_require=['pytest==2.8.3'],
     package_dir={'': 'src'},
     packages=find_packages('src'),

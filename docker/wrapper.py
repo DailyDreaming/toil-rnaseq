@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+from __future__ import absolute_import
 import argparse
 import json
 import logging
@@ -20,6 +21,8 @@ from itertools import chain
 from shutil import copyfile
 
 import socket
+from six.moves import map
+from six.moves import zip
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -28,7 +31,7 @@ def call_pipeline(mount, args):
 
     # Activate the virtual environment where the toil rnaseq pipeline is installed
     activate_this = '/opt/rnaseq-pipeline/toil_venv/bin/activate_this.py'
-    execfile(activate_this, dict(__file__=activate_this))
+    exec(compile(open(activate_this, "rb").read(), activate_this, 'exec'), dict(__file__=activate_this))
 
     if args.auto_scale:
         # Run the meoso-master process
@@ -145,7 +148,7 @@ def call_pipeline(mount, args):
 def generate_manifest(sample_tars, sample_singles, sample_pairs, workdir, output_basenames):
     path = os.path.join(workdir, 'manifest-toil-rnaseq.tsv')
     if sample_tars:
-        sample_tars = map(fileURL, sample_tars)
+        sample_tars = list(map(fileURL, sample_tars))
     if sample_pairs:
 
         print('generate manifest sample pairs:{}'.format(sample_pairs))
@@ -153,9 +156,9 @@ def generate_manifest(sample_tars, sample_singles, sample_pairs, workdir, output
         print('generate manifest output base names:{}'.format(output_basenames))
         log.info('generate manifest ouput base names:{}'.format(output_basenames))
 
-        sample_pairs = map(lambda sample: formatPairs(sample, workdir), sample_pairs)
+        sample_pairs = [formatPairs(sample, workdir) for sample in sample_pairs]
     if sample_singles:
-        sample_singles = map(fileURL, sample_singles)
+        sample_singles = list(map(fileURL, sample_singles))
     log.info('Path to manifest: ' + workdir)
     with open(path, 'w') as f:
         for samples in (sample_pairs, sample_tars, sample_singles):
@@ -207,7 +210,7 @@ def formatPairs(sample_pairs, work_mount):
         else:
             assert False, match.group()
     require(len(r1) == len(r2), 'Check fastq names, uneven number of pairs found.\nr1: {}\nr2: {}'.format(r1, r2))
-    interleaved_samples = zip(r1, r2)
+    interleaved_samples = list(zip(r1, r2))
     # flatten the list of tuples and join them into a comma delimited string
     # https://stackoverflow.com/questions/40993966/python-convert-tuple-to-comma-separated-string
     comma_delimited_samples = ','.join(map(str,chain.from_iterable(interleaved_samples)))

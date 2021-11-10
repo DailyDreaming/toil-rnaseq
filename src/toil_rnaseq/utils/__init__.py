@@ -1,12 +1,16 @@
 from __future__ import print_function
 
+from __future__ import absolute_import
 import errno
 import os
 import textwrap
 from collections import OrderedDict, defaultdict
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from toil_rnaseq.utils.expando import Expando
+import six
+from six.moves import range
+from six.moves import input
 
 schemes = ('file', 'http', 's3', 'ftp', 'gdc')
 _iter_types = (list, tuple, set, frozenset)
@@ -154,7 +158,7 @@ def user_input_config(config_path):
     :rtype: str
     """
     print('\n\t\t\tUser Input of Toil-rnaseq Configuration File\n')
-    start = raw_input('Type Y/y and hit enter to continue: ').lower()
+    start = input('Type Y/y and hit enter to continue: ').lower()
     if start != 'y':
         return None
     print('User will see comments for a configuation option followed by "<OPTION>: [Default Value]"')
@@ -183,7 +187,7 @@ def user_input_config(config_path):
             # Show option and get user input
             user_input = None
             while not user_input:
-                user_input = raw_input('\n{}: [{}]\n\tUser Input: '.format(option, default)).lower()
+                user_input = input('\n{}: [{}]\n\tUser Input: '.format(option, default)).lower()
             if user_input == 'q' or user_input == 'quit':
                 quit_flag = True
                 config[option] = default
@@ -248,7 +252,7 @@ def user_input_manifest(manifest_path):
     :rtype: str
     """
     print('\n\t\t\tUser Input of Toil-rnaseq Manifest')
-    start = raw_input('Type Y/y and hit enter to continue: ').lower()
+    start = input('Type Y/y and hit enter to continue: ').lower()
     if start != 'y':
         return None
     print('\n'.join(generate_manifest().split('\n')[:-1]))  # Don't print last line of manifest
@@ -259,16 +263,16 @@ def user_input_manifest(manifest_path):
         filetype, paired, uuid = None, None, None
         url = 'bad-url'
         while filetype not in ['tar', 'fq', 'bam']:
-            filetype = raw_input('Enter the filetype of the sample: ')
+            filetype = input('Enter the filetype of the sample: ')
         while paired not in ['paired', 'single']:
-            paired = raw_input('Enter whether sample is paired or single-end: ')
-        uuid = raw_input('Enter unique name (or UUID) of sample: ')
+            paired = input('Enter whether sample is paired or single-end: ')
+        uuid = input('Enter unique name (or UUID) of sample: ')
         while urlparse(url).scheme not in schemes:
-            url = raw_input('Enter URL for sample: ')
+            url = input('Enter URL for sample: ')
         samples.append((filetype, paired, uuid, url))
 
         # Escape loop
-        user = raw_input('\nType q/quit to exit or enter any other key to add more samples\n').lower()
+        user = input('\nType q/quit to exit or enter any other key to add more samples\n').lower()
         if user == 'q' or user == 'quit':
             break
 
@@ -351,7 +355,7 @@ def rexpando(d):
     :rtype: Expando
     """
     e = Expando()
-    for k, v in d.iteritems():
+    for k, v in six.iteritems(d):
         k = _key_to_attribute(k)
         if isinstance(v, dict):
             e[k] = rexpando(v)
@@ -404,7 +408,7 @@ def flatten(x):
     """
     result = []
     for el in x:
-        if hasattr(el, "__iter__") and not isinstance(el, basestring):
+        if hasattr(el, "__iter__") and not isinstance(el, six.string_types):
             result.extend(flatten(el))
         else:
             result.append(el)
@@ -425,7 +429,7 @@ def partitions(l, partition_size):
     :param list l: List to be partitioned
     :param int partition_size: Size of partitions
     """
-    for i in xrange(0, len(l), partition_size):
+    for i in range(0, len(l), partition_size):
         yield l[i:i + partition_size]
 
 

@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import os
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 
 from toil.lib.docker import dockerCall
 from toil.lib.docker import dockerCheckOutput

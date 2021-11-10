@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import shutil
 import tarfile
@@ -69,9 +71,9 @@ def generate_file(file_path, generate_func):
     :rtype: str
     """
     if os.path.exists(file_path):
-        print('File "{}" already exists! Doing nothing.'.format(file_path))
+        print(('File "{}" already exists! Doing nothing.'.format(file_path)))
     else:
         with open(file_path, 'w') as f:
             f.write(generate_func())
-        print('\t{} has been generated in the current working directory.'.format(os.path.basename(file_path)))
+        print(('\t{} has been generated in the current working directory.'.format(os.path.basename(file_path))))
     return file_path

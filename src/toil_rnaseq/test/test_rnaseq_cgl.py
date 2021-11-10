@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import logging
 import shlex
 import shutil
@@ -6,13 +7,14 @@ import tempfile
 import textwrap
 from contextlib import closing
 from unittest import TestCase
-from urlparse import urlparse
+from six.moves.urllib.parse import urlparse
 from uuid import uuid4
 
 import os
 import posixpath
 from bd2k.util.iterables import concat
 from boto.s3.connection import S3Connection, Bucket
+from six.moves import range
 
 log = logging.getLogger(__name__)
 
